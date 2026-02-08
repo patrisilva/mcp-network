@@ -1,0 +1,9 @@
+- name: configure NTP on Arista devices
+  hosts: arista_ceos
+  gather_facts: no
+  
+  tasks:
+    - name: Configure NTP server
+      arista.eos.config:
+         lines:
+          - ntp server 0.pool.ntp.org
