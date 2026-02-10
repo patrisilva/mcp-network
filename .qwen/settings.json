@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "mcp_automation": {
+      "command": "/home/patrick/venvs/mcp/bin/python",
+      "args": [
+        "MCPServer.py"
+      ],
+      "cwd": "/home/patrick/repos/mcp-network",
+      "env": {}
+    }
+  },
+  "$version": 3
+}
