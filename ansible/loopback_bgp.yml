@@ -1,0 +1,60 @@
+---
+- name: Configure loopback interface on R1 and BGP to advertise route
+  hosts: r1
+  gather_facts: no
+
+  tasks:
+    - name: Create loopback interface 1 with IP 11.11.11.11/32 on R1
+      arista.eos.config:
+        lines:
+          - ip address 11.11.11.11/32
+          - description Loopback Interface for Testing
+        parents: interface Loopback1
+
+- name: Configure BGP on all routers to advertise the loopback network
+  hosts: arista_ceos
+  gather_facts: no
+
+  tasks:
+    - name: Configure BGP and advertise the loopback network on R1
+      arista.eos.config:
+        lines:
+          - router-id {{ ansible_host }}
+          - redistribute connected
+          - network 11.11.11.11/32
+          - neighbor 172.20.20.12 remote-as 65001
+          - neighbor 172.20.20.12 update-source {{ ansible_host }}
+          - neighbor 172.20.20.13 remote-as 65001
+          - neighbor 172.20.20.13 update-source {{ ansible_host }}
+          - neighbor 172.20.20.12 next-hop-self
+          - neighbor 172.20.20.13 next-hop-self
+        parents: router bgp 65001
+      when: inventory_hostname == 'r1'
+
+    - name: Configure BGP on R2
+      arista.eos.config:
+        lines:
+          - router-id {{ ansible_host }}
+          - redistribute connected
+          - neighbor 172.20.20.11 remote-as 65001
+          - neighbor 172.20.20.11 update-source {{ ansible_host }}
+          - neighbor 172.20.20.13 remote-as 65001
+          - neighbor 172.20.20.13 update-source {{ ansible_host }}
+          - neighbor 172.20.20.11 next-hop-self
+          - neighbor 172.20.20.13 next-hop-self
+        parents: router bgp 65001
+      when: inventory_hostname == 'r2'
+
+    - name: Configure BGP on R3
+      arista.eos.config:
+        lines:
+          - router-id {{ ansible_host }}
+          - redistribute connected
+          - neighbor 172.20.20.11 remote-as 65001
+          - neighbor 172.20.20.11 update-source {{ ansible_host }}
+          - neighbor 172.20.20.12 remote-as 65001
+          - neighbor 172.20.20.12 update-source {{ ansible_host }}
+          - neighbor 172.20.20.11 next-hop-self
+          - neighbor 172.20.20.12 next-hop-self
+        parents: router bgp 65001
+      when: inventory_hostname == 'r3'

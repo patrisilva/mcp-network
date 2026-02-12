@@ -1,0 +1,37 @@
+---
+- name: Verify loopback interface and BGP configuration
+  hosts: arista_ceos
+  gather_facts: no
+
+  tasks:
+    - name: Check interfaces on all routers
+      arista.eos.command:
+        commands:
+          - show ip interface brief
+      register: interface_output
+      when: inventory_hostname == 'r1'
+
+    - name: Display interface output for R1
+      debug:
+        var: interface_output.stdout_lines
+      when: inventory_hostname == 'r1'
+
+    - name: Check BGP summary on all routers
+      arista.eos.command:
+        commands:
+          - show ip bgp summary
+      register: bgp_output
+
+    - name: Display BGP summary
+      debug:
+        var: bgp_output.stdout_lines
+
+    - name: Check BGP routes on all routers
+      arista.eos.command:
+        commands:
+          - show ip route bgp
+      register: route_output
+
+    - name: Display BGP routes
+      debug:
+        var: route_output.stdout_lines

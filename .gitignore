@@ -209,3 +209,5 @@ __marimo__/
 .clab/
 clab-mcp-lab/
 .env
+backup/
+snapshots/
