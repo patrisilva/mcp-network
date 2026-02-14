@@ -208,6 +208,7 @@ __marimo__/
 #Containerlab ignore
 .clab/
 clab-mcp-lab/
+clab-mcp-multivendor-lab/
 .env
 backup/
 snapshots/

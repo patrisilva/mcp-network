@@ -2,9 +2,9 @@
   "timezone": "UTC",
   "windows": [
     {
-      "days": ["thu","sat", "sun"],
-      "start": "00:00",
-      "end": "21:00"
+      "days": ["mon", "tue", "wed", "thu", "fri"],
+      "start": "06:00",
+      "end": "20:00"
     }
   ]
 }
